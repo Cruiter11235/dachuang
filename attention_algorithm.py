@@ -3,14 +3,13 @@ import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
 import pandas as pd
 import os
-
+# 环境变量
 os.environ['OMP_NUM_THREADS'] = '1'
 
 df = pd.read_csv('./data.csv')
 data = df[['timestamp', 'left_x', 'left_y', 'right_x', 'right_y']].to_numpy()
 maxarr = data.max(axis=0)
 minarr = data.min(axis=0)
-
 
 def split_by_timestamp(data, group_interval):
     current_group_start_time = data[0][0]
@@ -35,8 +34,9 @@ def split_by_timestamp(data, group_interval):
 def clusting(data, axs):
     data = np.array(data)
     X = data[:, 1:]
-    n_clusters = int(len(X) / 10)
-    if (n_clusters <= 1):
+    # n_clusters = int(len(X) / 10)
+    n_clusters = 3
+    if (len(X) < 3):
         return
     kmeans = KMeans(n_clusters=n_clusters, init='k-means++', n_init=10)
     # 使用KMeans算法进行聚类
@@ -56,9 +56,9 @@ def clusting(data, axs):
 
 group1 = split_by_timestamp(data, 3)
 
-fig, axs = plt.subplots(int((len(group1[:10]) + 5 - 1) / 5),
-                        5,
+fig, axs = plt.subplots(int((len(group1[:10]) + 3 - 1) / 3),
+                        3,
                         figsize=(10, 10))
-for i in range(len(group1[:10])):
-    clusting(group1[i], axs[int(i / 5)][i % 5])
+for i in range(len(group1[:11])):
+    clusting(group1[i], axs[int(i / 3)][i % 3])
 plt.show()
