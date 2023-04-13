@@ -11,6 +11,7 @@ data = df[['timestamp', 'left_x', 'left_y', 'right_x', 'right_y']].to_numpy()
 maxarr = data.max(axis=0)
 minarr = data.min(axis=0)
 
+
 def split_by_timestamp(data, group_interval):
     current_group_start_time = data[0][0]
     current_group_end_time = current_group_start_time + group_interval
